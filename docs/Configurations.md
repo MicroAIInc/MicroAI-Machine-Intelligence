@@ -1,0 +1,226 @@
+# Configurations
+The following options allows you to configure your agent according to your needs. Updating this requires the agent to be restarted, and in some cases, retrained.
+
+The configuration file can be located under config/config.json. Determine where the package was installed during the [installation step](../README.md#step-2-extract-and-set-up-the-agent).
+
+```sh
+MicroAI Machine Intelligence
+├── bin
+│   └── main
+├── config
+│   └── config.json # The configurations File
+├── data
+│   ├── logs # All log files
+│   └── models
+└── lib
+```
+## Table of Contents
+
+- [Configurations](#configurations)
+  - [Table of Contents](#table-of-contents)
+  - [Default configurations](#default-configurations)
+  - [Enabling Email Alerts for Fault Events](#enabling-email-alerts-for-fault-events)
+    - [SMTP Configuration Parameters](#smtp-configuration-parameters)
+    - [Email Notification Details](#email-notification-details)
+    - [Alert Severity Control](#alert-severity-control)
+  - [Exporter Configurations](#exporter-configurations)
+  - [All Configuration options](#all-configuration-options)
+
+## Default configurations
+
+By default, the agent includes a preconfigured set of parameters. For example, the training duration is set to 300 seconds (5 minutes), and model building is disabled (IsBuildModel = False). This means that if no existing models are available, MicroAI will create new ones; otherwise, it will use the existing models. To generate new models, you can set IsBuildModel to True and adjust the training duration based on your environment and desired coverage period. For additional information on other configuration parameters, refer to the next section.
+
+```json
+{
+  "General": {
+    "Device": "AtomML+",
+    "FwVersion": "1.2.3",
+    "APIkey": "<License Key>",
+    "Activation_Base_Url": "https://cloud1-api.micro.ai",
+    "Default_LAT": 32.88347,
+    "Default_LON": -96.95822,
+    "Location_Name":"Dallas"
+  },
+  "AI_general": {
+    "TrainingSecs": 300,
+    "SplitCounter": 20,
+    "AiFeedRate": 1000,
+    "SmallThreshold": 0.01,
+    "InitialPeriodSecs": 15,
+    "HealthScoreDelay": 10,
+    "BoundsLimit": false,
+    "IsBuildModel": false
+  },
+  // ... continued fields ...
+}
+```
+
+## Enabling Email Alerts for Fault Events
+
+The Email Notification Exporter enables the system to send automated email alerts based on predefined machine fault events. Users can configure SMTP settings to integrate with their email servers and specify alert severity levels to control which notifications are sent. Alerts can be filtered based on severity levels ranging from Critical to Informational, ensuring that users receive only the most relevant notifications.
+
+```json
+{
+  // ... other fields ...
+  "Email_Notification_Exporter": {
+    "smtp_host": "",
+    "smtp_port": 587,
+    "smtp_username": "",
+    "smtp_password": "",
+    "smtp_from_emailid": "",
+    "smtp_to_email_list": "",
+    "smtp_severity": "Critical, High"
+  }
+  // ... other fields ...
+}
+```
+To enable email notifications, the system requires SMTP (Simple Mail Transfer Protocol) configuration. The following parameters must be defined:
+
+### SMTP Configuration Parameters
+
+- **`smtp_host`**: Specifies the SMTP server address that will handle outgoing emails.  
+  *Example:* `smtp.mailserver.com`
+- **`smtp_port`**: Defines the port used for SMTP communication. Common values include:
+  - `587` (TLS encryption)
+  - `465` (SSL encryption)
+  - `25` (Unencrypted)
+- **`smtp_username`**: The email address used to authenticate with the SMTP server.  
+  *Example:* `admin@mailserver.com`
+- **`smtp_password`**: The password associated with the SMTP username for authentication.
+
+### Email Notification Details
+
+The following parameters define how email notifications are sent and received:
+
+- **`smtp_from_emailid`**: The sender's email address displayed in outgoing alerts.  
+  *Example:* `alertsFrom@mailserver.com`
+- **`smtp_to_email_list`**: A comma-separated list of recipient email addresses that should receive alerts.  
+  *Example:* `it_team@mailserver.com,support@mailserver.com`
+
+### Alert Severity Control
+
+Users can customize email notifications based on the severity of alerts, ensuring that only relevant notifications are received. The `smtp_severity` parameter defines the severity levels of notifications to be sent. The available options are:
+
+- **Critical** – Indicates urgent risk of machine failure and that immediate action is recommended.
+- **High** – Represents significant risk of machine failure and maitenance is highly recommended
+- **Medium** – Covers moderate risk of machine failure that should be reviewed.
+- **Low** – Includes minor alerts that may not require immediate attention.
+- **Info** – Provides general system activity updates.
+
+## Exporter Configurations
+
+MicroAI supports various exporters to forward machine events to remote systems. Users can configure these exporters based on their infrastructure:
+
+```json
+{
+  // ... other fields ...
+    "LaunchpadExporter": {
+        "Enabled": false //enabling this requires Launchpad account
+    },
+    "ExternalExporter": {
+        "ExternalExporterType": "off", //either http, redis or mqtt
+        "Https_Post_Endpoint": "",
+        "Output_Redis_Endpoint": "",
+        "Output_MQTT": {
+        "Endpoint": "127.0.0.1",
+        "Port": 1884,
+        "Username": "",
+        "Password": "",
+        "topic_prefix": "data/"
+        }
+    },
+  // ... other fields ...
+}
+```
+
+- **Launchpad Exporter:** Enabled to transmit data to Launchpad, this default exporter ensures you receive all machine data, including alerts, directly from the endpoint.
+- **HTTP Exporter:** This exporter sends all data, including synchronous and asynchronous information, to a specified HTTP endpoint. It forwards comprehensive event data, enabling users to integrate with custom web applications, or other HTTP-based services. This ensures that both real-time and historical data can be transferred seamlessly across systems.
+- **MQTT Exporter:** For systems utilizing MQTT messaging protocols, this exporter publishes all data, including both synchronous and asynchronous content, to an MQTT broker. This allows for the transmission of comprehensive event data. This method is ideal for lightweight, real-time messaging and is particularly well-suited for IoT-based applications and cloud-native systems that rely on MQTT for communication, enabling efficient data distribution across these environments.
+- **Redis Exporter:** The Redis exporter pushes all data, including both synchronous and asynchronous information, into a Redis queue. Offering the flexibility to send complete event data. This is particularly useful for applications that require fast access to event data or for integrating with other Redis-based systems, like job queues or message brokers, ensuring efficient message handling and storage in high-throughput environments.
+- **Built-in Prometheus metrics endpoint:** MicroAI Machine Intelligence includes a built-in Prometheus metrics endpoint to provide real-time machine monitoring and health diagnostics. The endpoint, accessible via http://127.0.0.1:55001/metrics, exposes key system telemetry in a Prometheus-compatible format, allowing integration with monitoring and alerting systems. This is always enabled.
+
+## All Configuration options
+
+All available configurable options available in the config file is provided below. You will need to restart the agent for these changes to take effect.
+
+| Category                        | Parameter                   | Value                             | Description                                                                                                |
+| ------------------------------- | --------------------------- | --------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| **General**                     | Device                      | AtomML+                           | Device type (Use Case)                                                                                     |
+|                                 | FwVersion                   | 1.2.3                             | Firmware version.                                                                                          |
+|                                 | APIkey                      |                                   | API key for activation.                                                                                    |
+|                                 | Activation_Base_Url         | https://cloud1-api.micro.ai       | Base URL for API activation.                                                                               |
+|                                 | Default_LAT                 | 0.0                               | Default latitude for the device location.                                                                  |
+|                                 | Default_LON                 | 0.0                               | Default longitude for the device location.                                                                 |
+|                                 | Location_Name               | Dallas                            | Name of the location where the device is placed.                                                           |
+| **AI General**                  | TrainingSecs                | 300                               | AI training duration in seconds.                                                                           |
+|                                 | SplitCounter                | 20                                | Period of the device’s behavior.                                                                           |
+|                                 | AiFeedRate                  | 1000                              | Rate at which AI accepts data (in ms).                                                                     |
+|                                 | SmallThreshold              | 0.01                              | Minimum distance between bounds.                                                                           |
+|                                 | InitialPeriodSecs           | 15                                | Delay before AI starts training.                                                                           |
+|                                 | HealthScoreDelay            | 10                                | Delay before health score calculation.                                                                     |
+|                                 | BoundsLimit                 | false                             | Whether AI calculates hard bounds.                                                                         |
+|                                 | IsBuildModel                | false                             | Whether AI builds a model. By default, if there is no model available, the AI will automatically build one |
+| **Health Groups**               | GroupID                     | 1                                 | Default groups: 1 = Security, 2 = Monitoring.                                                              |
+|                                 | GroupName                   | Group 1                           | Name of the group.                                                                                         |
+|                                 | Hysteresis                  | 20                                | Controls health score increase speed.                                                                      |
+|                                 | Hysteresis2                 | 20                                | Controls health score increase speed.                                                                      |
+|                                 | Aging                       | 0.9                               | Controls health score change rate.                                                                         |
+|                                 | Memory                      | 0.95                              | Controls how much previous data is retained.                                                               |
+|                                 | Noise                       | 0.05                              | Expected false positive rate.                                                                              |
+|                                 | Intensity                   | 2.5                               | Weight of abnormal channels.                                                                               |
+|                                 | DTNM (Maintenance Interval) | 40                                | Maintenance cycle length. Days to Maintenance.                                                             |
+|                                 | RL (Remaining Life)         | 1000                              | Device expected operational lifespan.                                                                      |
+|                                 | PdM                         | 1                                 | Predictive maintenance algorithm.                                                                          |
+|                                 | K                           | 0.02                              | Noise value for remaining life algorithm.                                                                  |
+| **Root Cause**                  | Enabled                     | true/false                        | Determines if Rootcause algorithm is used                                                                  |
+|                                 | CycleTagType                | (Non-)Accumulative                | Determines the Cycle reset logic                                                                           |
+|                                 | CycleTagName                | "CycleTime"                       | name of the cycle channel that controls the Rootcause algorithm                                            |
+|                                 | ClusterLimit                | 10                                | Max number of classifications the rc algorithm can find in total                                           |
+| **Channel**                     | ChanId                     | 1                         | Unique ID for the input channel to the AI |
+|                                 | ChanName                   | "Accel X Moving Average"               | Unique Name for the input channel to the AI logic |
+|                                 | Group                | 1                      | Unique ID for the group the channel belongs to |
+|                                 | GroupRank                | 1                                | Unique value per group that determines which widgets are rendered on the LaunchPad Dashboards |    
+|                                 | SampleRate                | 1000                                | controls the feature engineering functions used to transform the data |       
+|                                 | FE_order                | list of maps                                | Max number of classifications the rc algorithm can find in total |      
+|                                 | InputLocation                | 127.0.0.1:5005                                | Deprecated.  IP:port info to listen to for sensor data  |     
+|                                 | AILocation                | 127.0.0.1:5005                                | Deprecated. IP:port info to listen to for channel data    |   
+|                                 | SensID                | 1                                | Unique ID for the input sensor to the channel creation process      |
+|                                 | SensName                | "Accel X"                                | Unique Name for the input sensor to the channel creation process      | 
+|                                 | MeanCalGain                | .9                                | Tuning Parameter for the AI (0-1): High -> Loose: Low-> Strict  |             
+|                                 | StdCalGain                | .4                                | Tuning Parameter for the AI (0-1): High -> Strict: Low-> Loose  |     
+|                                 | SigmaWarn                | 3                                | Tuning Parameter for the AI (1-5): High -> Loose: Low -> Strict  |     
+|                                 | SigmaAlert                | 5                                | Tuning Parameter for the AI (SigmaWarn-7): High -> Loose: Low -> Strict |
+| **Y Code**                      | Mode                        | 0                                 | Determines if Continuous (0) or Storage (1) mode                                                           |
+|                                 | DeviceName                  | STWIN Test System                 | Name for device                                                                                            |
+|                                 | OutputLocation              | 127.0.0.1:5005                    |                                                                                                            |
+| **Mode Continuous**             | Sync_freq                   | 5000                              | Rate at which sync messages are sent (ms)                                                                  |
+|                                 | Max_async_freq              | 1000                              | Max rate at which async messages are sent (ms)                                                             |
+| **Mode Storage**                | Max_Rows                    | 50                                | Number of stored messages before triggering.                                                               |
+|                                 | Max_Secs                    | 600                               | Maximum age of stored messages.                                                                            |
+|                                 | Post_Event_Send_Time_secs   | 600                               | Duration of continuous mode after trigger.                                                                 |
+|                                 | Sync_freq                   | 5000                              | Frequency of sync packet generation.                                                                       |
+|                                 | Max_async_freq              | 1000                              | Max async packet generation frequency.                                                                     |
+| **Launchpad Exporter**          | Enabled                     | true                              | Enable sending data to Launchpad.                                                                          |
+| **External Exporter**           | ExternalExporterType        | Off/HTTP/MQTT/REDIS               | Specify one of these options                                                                               |
+|                                 | Https_Post_Endpoint         | https://your.site/endpoint        |                                                                                                            |
+|                                 | Output_Redis_Endpoint       | 192.168.2.171:6379                |                                                                                                            |
+|                                 | Output_MQTT_Endpoint        | 127.0.0.1                         |                                                                                                            |
+|                                 | Output_MQTT_Port            | 1884                              |                                                                                                            |
+|                                 | Output_MQTT_Username        | Example: user                     |                                                                                                            |
+|                                 | Output_MQTT_Password        | Example: password@123             |                                                                                                            |
+|                                 | Output_MQTT_topic_prefix    | data/                             |                                                                                                            |
+| **AI Studio Exporter**          | Mode                        | true/false                        |                                                                                                            |
+|                                 | Output_MQTT_Endpoint        | aistudio-broker.micro.ai          |                                                                                                            |
+|                                 | Output_MQTT_Port            | 5001                              |                                                                                                            |
+|                                 | Output_MQTT_Username        | (leave blank)                     |                                                                                                            |
+|                                 | Output_MQTT_Password        | (leave blank)                     |                                                                                                            |
+|                                 | Output_MQTT_topic_prefix    | Example: data/                    |                                                                                                            |
+| **Email Notification Exporter** | smtp_host                   | smtp.test.com                     | SMTP server for email notifications.                                                                       |
+|                                 | smtp_port                   | 587                               | SMTP port (587 for TLS, 465 for SSL).                                                                      |
+|                                 | smtp_username               |                                   | SMTP username.                                                                                             |
+|                                 | smtp_password               |                                   | SMTP password.                                                                                             |
+|                                 | smtp_from_emailid           |                                   | Sender email address.                                                                                      |
+|                                 | smtp_to_email_list          |                                   | Recipient email addresses.                                                                                 |
+|                                 | smtp_severity               | Critical, High, Medium, Low, Info | Severity levels triggering an email.                                                                       |
+
+---
