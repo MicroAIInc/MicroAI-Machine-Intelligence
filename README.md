@@ -48,8 +48,8 @@ Copy the following section for your operating system and architecture and update
 
 ```bash
 wget https://maicdn.micro.ai/AtomML_Plus/linux/MicroAI-MI-linux-amd64-<latest-version>.tar.gz
-tar -xzf MicroAI-Security-linux-amd64-<latest-version>.tar.gz
-cd MicroAI-Security-linux-amd64-<latest-version>/bin
+tar -xzf MicroAI-MI-linux-amd64-<latest-version>.tar.gz
+cd MicroAI-MI-linux-amd64-<latest-version>/bin
 chmod +x main
 ```
 
@@ -57,17 +57,17 @@ chmod +x main
 
 ```bash
 wget https://maicdn.micro.ai/AtomML_Plus/linux_arm/MicroAI-MI-linux-arm-<latest-version>.tar.gz
-tar -xzf MicroAI-Security-linux-arm-<latest-version>-rc1.tar.gz
-cd MicroAI-Security-linux-arm-<latest-version>/bin
+tar -xzf MicroAI-MI-linux-arm-<latest-version>.tar.gz
+cd MicroAI-MI-linux-arm-<latest-version>/bin
 chmod +x main
 ```
 
 #### **Linux (ARM x64)**
 
 ```bash
-wget https://maicdn.micro.ai/AtomML_Plus/linux_arm/MicroAI-MI-linux-arm64-<latest-version>-rc1.tar.gz
-tar -xzf MicroAI-Security-linux-arm64-<latest-version>-rc1.tar.gz
-cd MicroAI-Security-linux-arm64-<latest-version>/bin
+wget https://maicdn.micro.ai/AtomML_Plus/linux_arm/MicroAI-MI-linux-arm64-<latest-version>.tar.gz
+tar -xzf MicroAI-MI-linux-arm64-<latest-version>.tar.gz
+cd MicroAI-MI-linux-arm64-<latest-version>/bin
 chmod +x main
 ```
 #### **Windows (x64)**
