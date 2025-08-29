@@ -5,11 +5,11 @@ Welcome to the **official download page** for our software. Below, you'll find d
 ---
 
 ## 🐧 Linux Downloads
-| Version | Architecture | Tar File |
-|------|-------------|---------|
-| 1.5.1 | **x64**   | [Download](https://maicdn.micro.ai/AtomML_Plus/linux/MicroAI-MI-linux-amd64-1.5.1.tar.gz) |
-| 1.5.1 | **ARM**     | [Download](https://maicdn.micro.ai/AtomML_Plus/linux_arm/MicroAI-MI-linux-arm-1.5.1.tar.gz) |
-| 1.5.1 | **ARM64**   | [Download](https://maicdn.micro.ai/AtomML_Plus/linux_arm/MicroAI-MI-linux-arm64-1.5.1.tar.gz) |
+| Version | Architecture | Tar File                                                                                      |
+| ------- | ------------ | --------------------------------------------------------------------------------------------- |
+| 1.5.2   | **x64**      | [Download](https://maicdn.micro.ai/AtomML_Plus/linux/MicroAI-MI-linux-amd64-1.5.2.tar.gz)     |
+| 1.5.2   | **ARM**      | [Download](https://maicdn.micro.ai/AtomML_Plus/linux_arm/MicroAI-MI-linux-arm-1.5.2.tar.gz)   |
+| 1.5.2   | **ARM64**    | [Download](https://maicdn.micro.ai/AtomML_Plus/linux_arm/MicroAI-MI-linux-arm64-1.5.2.tar.gz) |
 
 
 > **Note:** To use the Docker image:
@@ -47,9 +47,9 @@ docker run  --name microai_mi_<latest-version> -e MAI_API_KEY=<license-key> -ti 
 ---
 
 ## 🖥️ Windows Download
-| Version | Architecture | Tar File |
-|------|-------------|---------|
-| 1.5.1 | **x64**   | [Download](https://maicdn.micro.ai/AtomML_Plus/windows/MicroAI-AtomML-Plus-windows-arm64-1.5.1.tar.gz) |
+| Version | Architecture | Tar File                                                                                               |
+| ------- | ------------ | ------------------------------------------------------------------------------------------------------ |
+| 1.5.2   | **x64**      | [Download](https://maicdn.micro.ai/AtomML_Plus/windows/MicroAI-AtomML-Plus-windows-arm64-1.5.2.tar.gz) |
 
 ---
 
